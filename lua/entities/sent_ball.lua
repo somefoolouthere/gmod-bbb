@@ -57,10 +57,8 @@ function ENT:SpawnFunction( ply, tr, ClassName )
 	local ent = ents.Create( ClassName )
 	ent:SetPos( SpawnPos )
 	ent:SetBallSize( size )
---	ent:SetBounciness( 0.9 )
-	ent:SetBounciness( 1.1 ) -- Super bouncy!!!
---	ent:SetBounceSound( "garrysmod/ball_bounce.wav" )
-	ent:SetBounceSound( "garrysmod/getupgetupgetup.wav" ) -- New & improved sound!!!
+	ent:SetBounciness( 0.9 )
+	ent:SetBounceSound( "garrysmod/ball_bounce.wav" )
 	ent:SetHealAmount( 5 )
 	ent:SetAllowOverheal( true )
 	ent:Spawn()
@@ -131,12 +129,9 @@ end
 function ENT:PhysicsCollide( data, physobj )
 
 	-- Play sound on bounce
---	if ( data.Speed > 20 && data.DeltaTime > 0.1 ) then -- More bouncing sounds
-	if ( data.Speed > 20 && data.DeltaTime > 0.2 ) then
---		local pitch = 255 / ( ( math.Clamp( self:GetBallSize(), self.MinSize, self.MaxSize ) + 16 ) / 24 ) -- New better sound pitch calculation
-		local pitch = 100
---		sound.Play( self:GetBounceSound(), self:GetPos(), 75, math.random( pitch - ( 0.07 * pitch ), pitch + ( 0.07 * pitch ) ), math.Clamp( ( data.Speed / 150 ) / ( pitch / 32 ), 0, 1 ) ) -- Pitch variation and volume adjusts to ball size
-		sound.Play( self:GetBounceSound(), self:GetPos(), 85, pitch, math.Clamp( ( data.Speed / 150 ) / ( pitch / 32 ), 0, 1 ) )
+	if ( data.Speed > 20 && data.DeltaTime > 0.1 ) then -- More bouncing sounds
+		local pitch = 255 / ( ( math.Clamp( self:GetBallSize(), self.MinSize, self.MaxSize ) + 16 ) / 24 ) -- New better sound pitch calculation
+		sound.Play( self:GetBounceSound(), self:GetPos(), 75, math.random( pitch - ( 0.07 * pitch ), pitch + ( 0.07 * pitch ) ), math.Clamp( ( data.Speed / 150 ) / ( pitch / 32 ), 0, 1 ) ) -- Pitch variation and volume adjusts to ball size
 end
 
 	-- Bounce like a crazy bitch
