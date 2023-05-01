@@ -159,10 +159,11 @@ function ENT:Use( activator, caller )
 	if ( activator:IsPlayer() ) then
 		-- Give the collecting player some free health
 		local health = activator:Health()
+		local maxhealth = activator:GetMaxHealth()
 		if ( !self:GetAllowOverheal() ) then
-			if ( health < 100 ) then -- Prevent overheal the proper way
+			if ( health < maxhealth ) then -- Prevent overheal the proper way
 				self:Remove()
-				activator:SetHealth( math.Clamp( health + self:GetHealAmount(), -math.huge, activator:GetMaxHealth() ) )
+				activator:SetHealth( math.Clamp( health + self:GetHealAmount(), -math.huge, maxhealth ) )
 				activator:SendLua( "achievements.EatBall()" )
 			end
 		else
