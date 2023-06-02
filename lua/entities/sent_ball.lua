@@ -3,7 +3,7 @@ AddCSLuaFile()
 DEFINE_BASECLASS( "base_anim" )
 
 ENT.PrintName = "Bouncy Ball"
-ENT.Author =	"Garry Newman"
+ENT.Author =	"Garry Newman & somefoolouthere"
 ENT.Information = "An edible bouncy ball"
 ENT.Category =	"Fun + Games"
 
@@ -19,10 +19,10 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar( "Float",	0, "BallSize",		{ KeyName = "ballsize",			Edit = { type = "Float",	min = self.MinSize, max = self.MaxSize,	order = 1, title = "Size"								} } )
 	self:NetworkVar( "Vector",	0, "BallColor",		{ KeyName = "ballcolor",		Edit = { type = "VectorColor",										order = 2, title = "Color"								} } )
-	self:NetworkVar( "Float",	1, "Bounciness",	{ Keyname = "bounciness",		Edit = { type = "Float",	min = 0,			max = 2,			order = 3, title = "Bounciness"							} } ) -- New options
-	self:NetworkVar( "String",	0, "BounceSound",	{ Keyname = "bouncesound",		Edit = { type = "Generic",											order = 4, title = "Bounce Sound",	waitforenter = true	} } )
-	self:NetworkVar( "Int",		0, "HealAmount",	{ Keyname = "healamount",		Edit = { type = "Int",		min = 0,			max = 100,			order = 5, title = "Heal Amount"						} } )
-	self:NetworkVar( "Bool",	0, "AllowOverheal",	{ Keyname = "allowoverheal",	Edit = { type = "Boolean",											order = 6, title = "Allow Overhealing"					} } )
+	self:NetworkVar( "Float",	1, "BallBounce",	{ Keyname = "ballbounce",		Edit = { type = "Float",	min = 0,			max = 2,			order = 3, title = "Bounciness"							} } ) -- New options
+	self:NetworkVar( "String",	0, "BallSound",		{ Keyname = "ballsound",		Edit = { type = "Generic",											order = 4, title = "Bounce Sound",	waitforenter = true	} } )
+	self:NetworkVar( "Int",		0, "BallHeal",		{ Keyname = "ballheal",			Edit = { type = "Int",		min = 0,			max = 100,			order = 5, title = "Heal Amount"						} } )
+	self:NetworkVar( "Bool",	0, "BallOverheal",	{ Keyname = "balloverheal",		Edit = { type = "Boolean",											order = 6, title = "Allow Overhealing"					} } )
 
 	if ( SERVER ) then
 	self:NetworkVarNotify( "BallSize", self.OnBallSizeChanged )
@@ -57,10 +57,10 @@ function ENT:SpawnFunction( ply, tr, ClassName )
 	local ent = ents.Create( ClassName )
 	ent:SetPos( SpawnPos )
 	ent:SetBallSize( size )
-	ent:SetBounciness( 0.9 )
-	ent:SetBounceSound( "garrysmod/ball_bounce.wav" )
-	ent:SetHealAmount( 5 )
-	ent:SetAllowOverheal( true )
+	ent:SetBallBounce( 0.9 )
+	ent:SetBallSound( "garrysmod/ball_bounce.wav" )
+	ent:SetBallHeal( 5 )
+	ent:SetBallOverheal( true )
 	ent:Spawn()
 	ent:Activate()
 
@@ -131,7 +131,7 @@ function ENT:PhysicsCollide( data, physobj )
 	-- Play sound on bounce
 	if ( data.Speed > 20 && data.DeltaTime > 0.1 ) then -- More bouncing sounds
 		local pitch = 255 / ( ( math.Clamp( self:GetBallSize(), self.MinSize, self.MaxSize ) + 16 ) / 24 ) -- New better sound pitch calculation
-		sound.Play( self:GetBounceSound(), self:GetPos(), 75, math.random( pitch - ( 0.07 * pitch ), pitch + ( 0.07 * pitch ) ), math.Clamp( ( data.Speed / 150 ) / ( pitch / 32 ), 0, 1 ) ) -- Pitch variation and volume adjusts to ball size
+		sound.Play( self:GetBallSound(), self:GetPos(), 75, math.random( pitch - ( 0.07 * pitch ), pitch + ( 0.07 * pitch ) ), math.Clamp( ( data.Speed / 150 ) / ( pitch / 32 ), 0, 1 ) ) -- Pitch variation and volume adjusts to ball size
 end
 
 	-- Bounce like a crazy bitch
@@ -141,7 +141,7 @@ end
 
 	LastSpeed = math.max( NewVelocity:Length(), LastSpeed )
 
-	local TargetVelocity = NewVelocity * LastSpeed * self:GetBounciness()
+	local TargetVelocity = NewVelocity * LastSpeed * self:GetBallBounce()
 
 	physobj:SetVelocity( TargetVelocity )
 
@@ -160,15 +160,15 @@ function ENT:Use( activator, caller )
 		-- Give the collecting player some free health
 		local health = activator:Health()
 		local maxhealth = activator:GetMaxHealth()
-		if ( !self:GetAllowOverheal() ) then
+		if ( !self:GetBallOverheal() ) then
 			if ( health < maxhealth ) then -- Prevent overheal the proper way
 				self:Remove()
-				activator:SetHealth( math.Clamp( health + self:GetHealAmount(), -math.huge, maxhealth ) )
+				activator:SetHealth( math.Clamp( health + self:GetBallHeal(), -math.huge, maxhealth ) )
 				activator:SendLua( "achievements.EatBall()" )
 			end
 		else
 			self:Remove()
-			activator:SetHealth( health + self:GetHealAmount() )
+			activator:SetHealth( health + self:GetBallHeal() )
 			activator:SendLua( "achievements.EatBall()" )
 		end
 	else
