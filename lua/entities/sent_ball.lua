@@ -17,15 +17,15 @@ ENT.MaxSize = 512
 
 function ENT:SetupDataTables()
 
-	self:NetworkVar("Float",	0, "BallSize",		{ KeyName = "ballsize",		Edit = { type = "Float",	min = self.MinSize, max = self.MaxSize,	order = 1, title = "Size"								}})
-	self:NetworkVar("Vector",	0, "BallColor",		{ KeyName = "ballcolor",	Edit = { type = "VectorColor",										order = 2, title = "Color"								}})
-	self:NetworkVar("Float",	1, "BallBounce",	{ Keyname = "ballbounce",	Edit = { type = "Float",	min = 0,			max = 2,			order = 3, title = "Bounciness"							}}) -- New options
-	self:NetworkVar("String",	0, "BallSound",		{ Keyname = "ballsound",	Edit = { type = "Generic",											order = 4, title = "Bounce Sound",	waitforenter = true	}})
-	self:NetworkVar("Int",		0, "BallHeal",		{ Keyname = "ballheal",		Edit = { type = "Int",		min = 0,			max = 100,			order = 5, title = "Heal Amount"						}})
-	self:NetworkVar("Bool",		0, "BallOverheal",	{ Keyname = "balloverheal",	Edit = { type = "Boolean",											order = 6, title = "Allow Overhealing"					}})
+	self:NetworkVar("Float",	0, "BallSize",		{ KeyName = "ballsize",		Edit = {type = "Float",	min = self.MinSize, max = self.MaxSize,	order = 1, title = "Size"								}})
+	self:NetworkVar("Vector",	0, "BallColor",		{ KeyName = "ballcolor",	Edit = {type = "VectorColor",									order = 2, title = "Color"								}})
+	self:NetworkVar("Float",	1, "BallBounce",	{ KeyName = "ballbounce",	Edit = {type = "Float",	min = 0,			max = 2,			order = 3, title = "Bounciness"							}}) -- New options
+	self:NetworkVar("String",	0, "BallSound",		{ KeyName = "ballsound",	Edit = {type = "Generic",										order = 4, title = "Bounce Sound",	waitforenter = true	}})
+	self:NetworkVar("Int",		0, "BallHeal",		{ KeyName = "ballheal",		Edit = {type = "Int",	min = 0,			max = 100,			order = 5, title = "Heal Amount"						}})
+	self:NetworkVar("Bool",		0, "BallOverheal",	{ KeyName = "balloverheal",	Edit = {type = "Boolean",										order = 6, title = "Allow Overhealing"					}})
 
 	if SERVER then
-	self:NetworkVarNotify( "BallSize", self.OnBallSizeChanged )
+	self:NetworkVarNotify("BallSize", self.OnBallSizeChanged)
 	end
 
 end
