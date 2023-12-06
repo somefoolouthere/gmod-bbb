@@ -17,15 +17,15 @@ ENT.MaxSize = 512
 
 function ENT:SetupDataTables()
 
-	self:NetworkVar("Float",	0, "BallSize",		{ KeyName = "ballsize",		Edit = {type = "Float",	min = self.MinSize, max = self.MaxSize,	order = 1, title = "Size"								}})
-	self:NetworkVar("Vector",	0, "BallColor",		{ KeyName = "ballcolor",	Edit = {type = "VectorColor",									order = 2, title = "Color"								}})
-	self:NetworkVar("Float",	1, "BallBounce",	{ KeyName = "ballbounce",	Edit = {type = "Float",	min = 0,			max = 2,			order = 3, title = "Bounciness"							}}) -- New options
-	self:NetworkVar("String",	0, "BallSound",		{ KeyName = "ballsound",	Edit = {type = "Generic",										order = 4, title = "Bounce Sound",	waitforenter = true	}})
-	self:NetworkVar("Int",		0, "BallHeal",		{ KeyName = "ballheal",		Edit = {type = "Int",	min = 0,			max = 100,			order = 5, title = "Heal Amount"						}})
-	self:NetworkVar("Bool",		0, "BallOverheal",	{ KeyName = "balloverheal",	Edit = {type = "Boolean",										order = 6, title = "Allow Overhealing"					}})
+	self:NetworkVar("Float",	0,"BallSize",		{KeyName =	"ballsize",		Edit = {type = "Float", min = self.MinSize, max = self.MaxSize,order	= 1,title = "Size"								}})
+	self:NetworkVar("Vector",	0,"BallColor",		{KeyName =	"ballcolor",	Edit = {type = "VectorColor",									order	= 2,title = "Color"								}})
+	self:NetworkVar("Float",	1,"BallBounce",		{KeyName =	"ballbounce",	Edit = {type = "Float",	min = 0,			max = 2,			order	= 3,title = "Bounciness"						}}) -- New options
+	self:NetworkVar("String",	0,"BallSound",		{KeyName =	"ballsound",	Edit = {type = "Generic",										order	= 4,title = "Bounce Sound",	waitforenter =	true}})
+	self:NetworkVar("Int",		0,"BallHeal",		{KeyName =	"ballheal",		Edit = {type = "Int",	min = 0,			max =	100,		order	= 5,title = "Heal Amount"						}})
+	self:NetworkVar("Bool",		0,"BallOverheal",	{KeyName =	"balloverheal", Edit = {type = "Boolean",										order	= 6,title = "Allow Overhealing"					}})
 
 	if SERVER then
-	self:NetworkVarNotify("BallSize", self.OnBallSizeChanged)
+	self:NetworkVarNotify("BallSize",self.OnBallSizeChanged)
 	end
 
 end
@@ -36,11 +36,11 @@ If you want to make your SENT spawnable you need one of these functions to prope
 ply is the name of the player that is spawning it
 tr is the trace from the player's eyes ]]
 
-function ENT:SpawnFunction(ply, tr, ClassName)
+function ENT:SpawnFunction(ply,tr,ClassName)
 
 	if !tr.Hit then return end
 
-	local size = math.random(16, 48)
+	local size = math.random(16,48)
 	local SpawnPos = tr.HitPos + tr.HitNormal * size
 
 	-- Make sure the spawn position is not out of bounds
@@ -78,40 +78,42 @@ function ENT:Initialize()
 
 	-- Select a random color for the ball
 	self:SetBallColor(table.Random({
-		Vector(1,	0.3, 0.3),	-- Default Red
-		Vector(0.3, 1,	0.3),	-- Default Green
-		Vector(1,	1,	0.3),	-- Default Yellow
-		Vector(0.2, 0.3, 1),	-- Default Blue
-		Vector(0.5, 0.5, 0.5),	-- The Gray One
-		Vector(0.1, 0.1, 0.1),	-- Black
+		Vector(1,	0.3,0.3), -- Default Red
+		Vector(0.3, 1,	0.3), -- Default Green
+		Vector(1,	1,	0.3), -- Default Yellow
+		Vector(0.2, 0.3,1),	-- Default Blue
+		Vector(0.5, 0.5,0.5), -- The Gray One
+		Vector(0.1, 0.1,0.1), -- Black
 		Vector(1,	1,	1),	-- White
-		Vector(1,	0.3, 1),	-- Magenta
+		Vector(1,	0.3,1),	-- Magenta
 		Vector(0.3, 1,	1),	-- Cyan
-		Vector(0.3, 0.3, 1),	-- Blue
-		Vector(1,	0.4, 0.3),	-- Orange
-		Vector(0.4, 0.3, 1),	-- Purple
-		Vector(0.3, 0.6, 1),	-- Turquoise
-		Vector(0.3, 0.5, 1),	-- Turquoise 2
-		Vector(0.5, 0.3, 1),	-- Purple 2
-		Vector(1,	0.3, 0.5),	-- Magenta 2
-		Vector(0.3, 1,	0.5),	-- Mint
-		Vector(0.5, 1,	0.3),	-- Lime Green
+		Vector(0.3, 0.3,1),	-- Blue
+		Vector(1,	0.4,0.3),	-- Orange
+		Vector(0.4, 0.3,1),	-- Purple
+		Vector(0.3, 0.6,1),	-- Turquoise
+		Vector(0.3, 0.5,1),	-- Turquoise 2
+		Vector(0.5, 0.3,1),	-- Purple 2
+		Vector(1,	0.3,0.5), -- Magenta 2
+		Vector(0.3, 1,	0.5), -- Mint
+		Vector(0.5, 1,	0.3), -- Lime Green
+		Vector(0.5, 0,	0), -- Dark Red
+		Vector(0,	0.5,0) -- Dark green
 	}))
 
 end
 
 function ENT:RebuildPhysics(value)
 
-	local size = math.Clamp(value or self:GetBallSize(), self.MinSize, self.MaxSize) / 2.1
-	self:PhysicsInitSphere(size, "metal_bouncy")
-	self:SetCollisionBounds(Vector(-size, -size, -size), Vector(size, size, size))
+	local size = math.Clamp(value or self:GetBallSize(),self.MinSize,self.MaxSize) / 2.1
+	self:PhysicsInitSphere(size,"metal_bouncy")
+	self:SetCollisionBounds(Vector(-size,-size,-size),Vector(size,size,size))
 
 	self:PhysWake()
 
 end
 
 if SERVER then
-function ENT:OnBallSizeChanged(varname, oldvalue, newvalue)
+function ENT:OnBallSizeChanged(varname,oldvalue,newvalue)
 
 	if (oldvalue == newvalue) then return end -- Do not rebuild if the size wasn't changed
 
@@ -124,16 +126,16 @@ function ENT:PhysicsCollide(data, physobj)
 
 	-- Play sound on bounce
 	if (data.Speed > 20 && data.DeltaTime > 0.1) then -- More bouncing sounds
-		local pitch = 255 / ((math.Clamp(self:GetBallSize(), self.MinSize, self.MaxSize) + 16) / 24) -- New better sound pitch calculation
-		sound.Play(self:GetBallSound(), self:GetPos(), 75, math.random(pitch - (0.07 * pitch), pitch + (0.07 * pitch)), math.Clamp((data.Speed / 150) / (pitch / 32), 0, 1)) -- Pitch variation and volume adjusts to ball size
+		local pitch = 255 / ((math.Clamp(self:GetBallSize(),self.MinSize,self.MaxSize) + 16) / 24) -- New better sound pitch calculation
+		sound.Play(self:GetBallSound(),self:GetPos(),75,math.random(pitch - (0.07 * pitch),pitch + (0.07 * pitch)),math.Clamp((data.Speed / 150) / (pitch / 32), 0, 1)) -- Pitch variation and volume depends on ball size
 end
 
 	-- Bounce like a crazy bitch
-	local LastSpeed = math.max(data.OurOldVelocity:Length(), data.Speed)
+	local LastSpeed = math.max(data.OurOldVelocity:Length(),data.Speed)
 	local NewVelocity = physobj:GetVelocity()
 	NewVelocity:Normalize()
 
-	LastSpeed = math.max(NewVelocity:Length(), LastSpeed)
+	LastSpeed = math.max(NewVelocity:Length(),LastSpeed)
 
 	local TargetVelocity = NewVelocity * LastSpeed * self:GetBallBounce()
 
@@ -147,7 +149,7 @@ function ENT:OnTakeDamage(dmginfo)
 
 end
 
-function ENT:Use(activator, caller)
+function ENT:Use(activator,caller)
 
 	if (activator:IsPlayer()) then
 		-- Give the collecting player some free health
@@ -160,7 +162,7 @@ function ENT:Use(activator, caller)
 		else
 			if (health < maxhealth) then -- Prevent overheal the proper way
 				self:Remove()
-				activator:SetHealth(math.Clamp(health + self:GetBallHeal(), -math.huge, maxhealth))
+				activator:SetHealth(math.Clamp(health + self:GetBallHeal(),-math.huge,maxhealth))
 				activator:SendLua("achievements.EatBall()")
 			end
 		end
@@ -178,14 +180,14 @@ function ENT:Draw()
 	render.SetMaterial(matBall)
 
 	local pos = self:GetPos()
-	local lcolor = render.ComputeLighting(pos, Vector(0, 0, 1))
+	local lcolor = render.ComputeLighting(pos,Vector(0,0,1))
 	local c = self:GetBallColor()
 
-	lcolor.x = c.r * (math.Clamp(lcolor.x, 0, 1) + 0.5) * 255
-	lcolor.y = c.g * (math.Clamp(lcolor.y, 0, 1) + 0.5) * 255
-	lcolor.z = c.b * (math.Clamp(lcolor.z, 0, 1) + 0.5) * 255
+	lcolor.x = c.r * (math.Clamp(lcolor.x,0,1) + 0.5) * 255
+	lcolor.y = c.g * (math.Clamp(lcolor.y,0,1) + 0.5) * 255
+	lcolor.z = c.b * (math.Clamp(lcolor.z,0,1) + 0.5) * 255
 
-	local size = math.Clamp(self:GetBallSize(), self.MinSize, self.MaxSize)
-	render.DrawSprite(pos, size, size, Color(lcolor.x, lcolor.y, lcolor.z, 255))
+	local size = math.Clamp(self:GetBallSize(),self.MinSize,self.MaxSize)
+	render.DrawSprite(pos,size,size,Color(lcolor.x,lcolor.y,lcolor.z,255))
 
 end
