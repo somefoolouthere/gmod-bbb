@@ -1,19 +1,15 @@
 AddCSLuaFile()
-
 DEFINE_BASECLASS("base_anim")
-
 ENT.PrintName = "Bouncy Ball"
 ENT.Author	=	"Garry Newman & somefoolouthere"
 ENT.Information = "An edible bouncy ball"
 ENT.Category =	"Fun + Games"
-
 ENT.Editable	= true
 ENT.Spawnable	= true
 ENT.AdminOnly	= false
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
-
-ENT.MinSize = 1 -- Less restricted size limits
-ENT.MaxSize = 512
+ENT.MinSize =	1 -- Less restricted size limits
+ENT.MaxSize =	512
 
 function ENT:SetupDataTables()
 	self:NetworkVar("Float",	0,"BallSize",		{KeyName =	"ballsize",		Edit = {type = "Float", min = self.MinSize, max = self.MaxSize,order	= 1,title = "Size"								}})
@@ -104,7 +100,7 @@ function ENT:PhysicsCollide(data, physobj)
 	-- Play sound on bounce
 	if (data.Speed > 20 && data.DeltaTime > 0.1) then -- More bouncing sounds
 		local pitch = 255 / ((math.Clamp(self:GetBallSize(),self.MinSize,self.MaxSize) + 16) / 24) -- New better sound pitch calculation
-		sound.Play(self:GetBallSound(),self:GetPos(),75,math.random(pitch / 1.07,pitch * 1.07),math.Clamp((data.Speed / 150) / (pitch / 32), 0, 1)) -- Pitch variation and volume depends on ball size
+		sound.Play(self:GetBallSound(),self:GetPos(),75,math.random(pitch / 1.07,pitch * 1.07),math.Clamp((data.Speed / 150) / (pitch / 32),0,1)) -- Pitch variation and volume depends on ball size
 end
 	-- Bounce like a crazy bitch
 	local LastSpeed = math.max(data.OurOldVelocity:Length(),data.Speed)
