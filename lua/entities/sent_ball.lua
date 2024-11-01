@@ -45,10 +45,6 @@ function ENT:SpawnFunction(ply,tr,ClassName)
 	local ent = ents.Create(ClassName)
 	ent:SetPos(SpawnPos)
 	ent:SetBallSize(size)
-	ent:SetBallBounce(0.9)
-	ent:SetBallSound("garrysmod/ball_bounce.wav")
-	ent:SetBallHeal(5)
-	ent:SetBallOverheal(true)
 	ent:Spawn()
 	ent:Activate()
 	return ent
@@ -80,6 +76,10 @@ function ENT:Initialize()
 		Vector(0.5, 0,	0), -- Dark Red
 		Vector(0,	0.5,0) -- Dark green
 	}))
+	self:SetBallBounce(0.9)
+	self:SetBallSound("garrysmod/ball_bounce.wav")
+	self:SetBallHeal(5)
+	self:SetBallOverheal(true)
 end
 
 function ENT:RebuildPhysics(value)
