@@ -90,10 +90,10 @@ function ENT:RebuildPhysics(value)
 end
 
 if SERVER then
-function ENT:OnBallSizeChanged(varname,oldvalue,newvalue)
-	if (oldvalue == newvalue) then return end -- Do not rebuild if the size wasn't changed
-	self:RebuildPhysics(newvalue)
-end
+	function ENT:OnBallSizeChanged(varname,oldvalue,newvalue)
+		if (oldvalue == newvalue) then return end -- Do not rebuild if the size wasn't changed
+		self:RebuildPhysics(newvalue)
+	end
 end
 
 function ENT:PhysicsCollide(data, physobj)
